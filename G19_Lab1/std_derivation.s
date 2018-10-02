@@ -4,7 +4,7 @@
 _start:
 			LDR R4, =RESULT		// holds the result location
 			LDR R3, [R4, #4]	// holds the total number of values
-			LDR R2, R4, #8		// holds the address of the first number in the list
+			ADD R2, R4, #8		// holds the address of the first number in the list
 			LDR R0, [R4]		// holds the maximum number
 			LDR R5, [R4]		// holds the minimum number
 
