@@ -1,0 +1,52 @@
+
+//campus.mcgill.ca/EMF/ELE/bjay/Desktop/G19_Lab1/stddev.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+   0:	e59f4070 	ldr	r4, [pc, #112]	; 78 <NUMBERS+0x1c>
+   4:	e5943004 	ldr	r3, [r4, #4]
+   8:	e2842008 	add	r2, r4, #8
+   c:	e5940000 	ldr	r0, [r4]
+  10:	e5945000 	ldr	r5, [r4]
+
+00000014 <LOOP>:
+  14:	e2533001 	subs	r3, r3, #1
+  18:	0a000009 	beq	44 <COMPUTE_STD_DEV>
+  1c:	e2822004 	add	r2, r2, #4
+  20:	e5921000 	ldr	r1, [r2]
+  24:	e1500001 	cmp	r0, r1
+  28:	aa000001 	bge	34 <MIN_LOOP>
+  2c:	e1a00001 	mov	r0, r1
+  30:	eafffff7 	b	14 <LOOP>
+
+00000034 <MIN_LOOP>:
+  34:	e1550001 	cmp	r5, r1
+  38:	aafffff5 	bge	14 <LOOP>
+  3c:	e1a05001 	mov	r5, r1
+  40:	eafffff3 	b	14 <LOOP>
+
+00000044 <COMPUTE_STD_DEV>:
+  44:	e0500005 	subs	r0, r0, r5
+  48:	e1a00120 	lsr	r0, r0, #2
+  4c:	e5840000 	str	r0, [r4]
+
+00000050 <END>:
+  50:	eafffffe 	b	50 <END>
+
+00000054 <RESULT>:
+  54:	00000000 	.word	0x00000000
+
+00000058 <N>:
+  58:	00000007 	.word	0x00000007
+
+0000005c <NUMBERS>:
+  5c:	00000004 	.word	0x00000004
+  60:	00000005 	.word	0x00000005
+  64:	00000003 	.word	0x00000003
+  68:	00000006 	.word	0x00000006
+  6c:	00000001 	.word	0x00000001
+  70:	00000008 	.word	0x00000008
+  74:	00000002 	.word	0x00000002
+  78:	00000054 	.word	0x00000054
