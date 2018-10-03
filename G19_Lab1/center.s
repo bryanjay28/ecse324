@@ -14,16 +14,15 @@ TOTAL:		SUBS R3, R3, #1		// decrement the counter
 			B TOTAL
 
 ENDTOTAL: 	LDR R3, [R4, #4]	// holds the total number of values
-			STR R0, [R4]
 			B AVERAGE
 
-AVERAGE:	LSR R3, #1			// divide by 2 until counter hits 0
+AVERAGE:	LSR R3, R3, #1		// divide by 2 until counter hits 0
+			CMP R3, #0	
 			BEQ ENDAVERAGE	 	// if 0, then divide by 2 one more time then do substraction
-			LSR R0, #1			// divide the total numbers by 2 to get avg
+			LSR R0, R0, #1		// divide the total numbers by 2 to get avg
 			B AVERAGE
 
-ENDAVERAGE:	LSR R0, #1			// do the last division by two for the avg
-			STR R0, [R4]
+ENDAVERAGE:	STR R0, [R4]
 			ADD R2, R4, #8		// holds the address of the first number in the list
 			LDR R3, [R4, #4]	// holds the total number of values
 			B SUBS_AVG
