@@ -1,0 +1,95 @@
+
+//campus.mcgill.ca/EMF/ELE/bjay/Desktop/G19_Lab1/sort.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+			.text
+			.global _start
+
+_start:		LDR R4, =RESULT		// holds the average location
+   0:	e59f4090 	ldr	r4, [pc, #144]	; 98 <SIGNAL+0x20>
+			LDR R2, [R4, #4]	// holds the total number of values
+   4:	e5942004 	ldr	r2, [r4, #4]
+			ADD R3, R2, #0		// holds the total number of iterations
+   8:	e2823000 	add	r3, r2, #0
+
+0000000c <PRE_ITER>:
+
+PRE_ITER: 	SUBS R3, R3, #1		// decrement the total of iterations
+   c:	e2533001 	subs	r3, r3, #1
+			BEQ END
+  10:	0a000015 	beq	6c <END>
+			LDR R2, [R4, #4]	// holds the total number of values
+  14:	e5942004 	ldr	r2, [r4, #4]
+			ADD R0, R4, #8		// holds the address of the first number in the array
+  18:	e2840008 	add	r0, r4, #8
+			ADD R1, R4, #12		// holds the address of the second number in the array
+  1c:	e284100c 	add	r1, r4, #12
+			LDR R5, [R0]		// holds the value of the first number and second number
+  20:	e5905000 	ldr	r5, [r0]
+			LDR R6, [R1]
+  24:	e5916000 	ldr	r6, [r1]
+			B SORT
+  28:	eaffffff 	b	2c <SORT>
+
+0000002c <SORT>:
+
+SORT:		SUBS R2, R2, #1		// decrement the total number of items in the array
+  2c:	e2522001 	subs	r2, r2, #1
+			BEQ PRE_ITER
+  30:	0afffff5 	beq	c <PRE_ITER>
+			CMP R5, R6
+  34:	e1550006 	cmp	r5, r6
+			BGT SWAP 			// if R5 > R6, then swap the numbers
+  38:	ca000004 	bgt	50 <SWAP>
+			ADD R0, R0, #4		// holds the address of the next number in the array
+  3c:	e2800004 	add	r0, r0, #4
+			ADD R1, R1, #4		// holds the address of the next number in the array
+  40:	e2811004 	add	r1, r1, #4
+			LDR R5, [R0]		// holds the value of the numbers
+  44:	e5905000 	ldr	r5, [r0]
+			LDR R6, [R1]
+  48:	e5916000 	ldr	r6, [r1]
+			B SORT				// recall sort function
+  4c:	eafffff6 	b	2c <SORT>
+
+00000050 <SWAP>:
+
+SWAP: 		STR R5, [R1]
+  50:	e5815000 	str	r5, [r1]
+			STR R6, [R0]
+  54:	e5806000 	str	r6, [r0]
+			ADD R0, R0, #4		// holds the address of the next number in the array
+  58:	e2800004 	add	r0, r0, #4
+			ADD R1, R1, #4		// holds the address of the next number in the array
+  5c:	e2811004 	add	r1, r1, #4
+			LDR R5, [R0]		// holds the value of the numbers
+  60:	e5905000 	ldr	r5, [r0]
+			LDR R6, [R1]
+  64:	e5916000 	ldr	r6, [r1]
+			B SORT				// return to sorting function
+  68:	eaffffef 	b	2c <SORT>
+
+0000006c <END>:
+
+END: 		B END
+  6c:	eafffffe 	b	6c <END>
+
+00000070 <RESULT>:
+  70:	00000000 	.word	0x00000000
+
+00000074 <N>:
+  74:	00000008 	.word	0x00000008
+
+00000078 <SIGNAL>:
+  78:	00000004 	.word	0x00000004
+  7c:	00000005 	.word	0x00000005
+  80:	00000003 	.word	0x00000003
+  84:	00000006 	.word	0x00000006
+  88:	00000001 	.word	0x00000001
+  8c:	00000008 	.word	0x00000008
+  90:	00000006 	.word	0x00000006
+  94:	00000007 	.word	0x00000007
+  98:	00000070 	.word	0x00000070

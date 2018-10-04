@@ -3,10 +3,11 @@
 
 _start:		LDR R4, =RESULT		// holds the average location
 			LDR R2, [R4, #4]	// holds the total number of values
-			LDR R3, R2			// holds the total number of iterations
+			ADD R3, R2, #0		// holds the total number of iterations
 
 PRE_ITER: 	SUBS R3, R3, #1		// decrement the total of iterations
 			BEQ END
+			LDR R2, [R4, #4]	// holds the total number of values
 			ADD R0, R4, #8		// holds the address of the first number in the array
 			ADD R1, R4, #12		// holds the address of the second number in the array
 			LDR R5, [R0]		// holds the value of the first number and second number
