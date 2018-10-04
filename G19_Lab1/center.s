@@ -27,12 +27,12 @@ ENDAVERAGE:	STR R0, [R4]
 			LDR R3, [R4, #4]	// holds the total number of values
 			B SUBS_AVG
 
-SUBS_AVG:	SUBS R3, R3, #1 	// decrement counter
-			BEQ END				// if 0, then the numbers have been cycled through
-			LDR R5, [R2]		// load the value of the number
-			SUBS R5, R5, R0		// take the number - avg
+SUBS_AVG:	LDR R5, [R2]		// load the value of the number
+			SUB R5, R5, R0		// take the number - avg
 			STR R5, [R2]		// store the new value
-			ADD R2, R4, #4		// R2 holds the address of the next number 
+			ADD R2, R2, #4		// R2 holds the address of the next number 
+			SUBS R3, R3, #1 	// decrement counter
+			BEQ END				// if 0, then the numbers have been cycled through
 			B SUBS_AVG
 
 

@@ -65,18 +65,18 @@ ENDAVERAGE:	STR R0, [R4]
 
 00000054 <SUBS_AVG>:
 
-SUBS_AVG:	SUBS R3, R3, #1 	// decrement counter
-  54:	e2533001 	subs	r3, r3, #1
-			BEQ END				// if 0, then the numbers have been cycled through
-  58:	0a000004 	beq	70 <END>
-			LDR R5, [R2]		// load the value of the number
-  5c:	e5925000 	ldr	r5, [r2]
-			SUBS R5, R5, R0		// take the number - avg
-  60:	e0555000 	subs	r5, r5, r0
+SUBS_AVG:	LDR R5, [R2]		// load the value of the number
+  54:	e5925000 	ldr	r5, [r2]
+			SUB R5, R5, R0		// take the number - avg
+  58:	e0455000 	sub	r5, r5, r0
 			STR R5, [R2]		// store the new value
-  64:	e5825000 	str	r5, [r2]
-			ADD R2, R4, #4		// R2 holds the address of the next number 
-  68:	e2842004 	add	r2, r4, #4
+  5c:	e5825000 	str	r5, [r2]
+			ADD R2, R2, #4		// R2 holds the address of the next number 
+  60:	e2822004 	add	r2, r2, #4
+			SUBS R3, R3, #1 	// decrement counter
+  64:	e2533001 	subs	r3, r3, #1
+			BEQ END				// if 0, then the numbers have been cycled through
+  68:	0a000000 	beq	70 <END>
 			B SUBS_AVG
   6c:	eafffff8 	b	54 <SUBS_AVG>
 
