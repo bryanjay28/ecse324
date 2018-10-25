@@ -6,10 +6,11 @@ _start:     LDR R0, NUMBER  // load the number for the fibobacci calculation
             PUSH {LR}   // store the registers used
             BL FIB          // link to fibonacci call
             POP {LR}
+            B END
 
 FIB:        CMP R0, #2
-            MOVEQ MOV R4, #1
-            MOVEQ PC, LR
+            MOVLT R4, #1
+            MOVLT PC, LR
             SUB R0, R0, #1
             PUSH {R0, LR}
             BL FIB
