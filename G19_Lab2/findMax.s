@@ -6,14 +6,14 @@ _start:     LDR R2, =NUMBERS
             LDR R0, RESULT
             PUSH {R0-R2, LR}    // push the used parameter onto the stack and the LR
             BL MAX              
-            LDR R3, [SP]        // get the resulting maximum from the SP
+            LDR R3, [SP,]        // get the resulting maximum from the SP
             STR R3, RESULT      // store the maximum into RESULT
             LDR LR, [SP, #12]   // restore LR
             ADD SP, SP, #16     // retore the SP to be empty 
 END:        B END
 
 MAX:        PUSH {R0-R3}
-            LDR R0, [SP, #16]   // loat the result starting at 0
+            LDR R0, [SP, #16]   // load the result starting at 0
             LDR R1, [SP, #20]   // total number of elements in the array
             LDR R2, [SP, #24]   // location of the array
 LOOP:       LDR R3, [R2], #4    // load the content of the address and iterate through the array
@@ -23,7 +23,7 @@ LOOP:       LDR R3, [R2], #4    // load the content of the address and iterate t
 DECREMENT:  SUBS R1, R1, #1     // decrement the counter
             BGT LOOP            // if counter is greater than 0 then go to the loop
             STR R0, [SP, #16]   // else, iteration is complete and store the max
-            POP {R0, R3}        // store the used registers
+            POP {R0-R3}        // pop the used registers
             BX LR              
 
 
