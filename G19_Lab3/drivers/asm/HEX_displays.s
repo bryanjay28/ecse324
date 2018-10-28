@@ -70,7 +70,7 @@ HEX_write_ASM:	PUSH {LR}
 				LDR R2, =HEX_BASE0		// contains the address for displays 0-3
 				LDR R3, =HEX_BASE4		// contains the address for displays 4-5
 				LDR R7, =HEX_VAL		// contains array of bytes of the bit values for numbers 0-15
-				LDR R8, [R7, R1]		// load the corresponding hex value for the char
+				LDRB R8, [R7, R1]		// load the corresponding hex value for the char
 				MOV R4, #6				// counter for bits, 6 possiblet hex codes
 				MOV R5, #1				// compare with each bit to get hex number since one hot encoded
 
@@ -78,7 +78,7 @@ LOOP_BOTTOM2:	CMP R4, #2
 				BEQ LOOP_TOP2
 				ANDS R6, R5, R0 		// check which bit is 1 since to get the hex display
 				BEQ BOTTOM2				// if R5 > 0, then go to clear
-				STRB R8, [R1]			// store the desired value in to the hex_base0 diaplay
+				STRB R8, [R2]			// store the desired value in to the hex_base0 diaplay
 
 BOTTOM2:		LSL R5, #1				// shift #1 bit to the left to check the next bit value
 				ADD R2, R2, #1			// increment hex display value
@@ -88,8 +88,8 @@ BOTTOM2:		LSL R5, #1				// shift #1 bit to the left to check the next bit value
 LOOP_TOP2:		CMP R4, #0				// compare with 0 to determine end of the loops
 				BEQ END					// if 0, go to the end
 				ANDS R6, R5, R0			// repeat process form above
-				BEQ TOP
-				STRB R8, [R2]			// store into address hex_base4
+				BEQ TOP2
+				STRB R8, [R3]			// store into address hex_base4
 
 TOP2:			LSL R5, #1
 				ADD R3, R3, #1			// increment address of hex_base4
