@@ -1,9 +1,9 @@
 			.text
 			.global _start
 
-_start:		LDR R4, =RESULT		// load the result address and number value
+_start:		LDR R4, =RESULT		// load the RESULT address and number value
 			LDR R1, NUMBER			
-			PUSH {R0, R1, LR}	// push the address and value onto the stack
+			PUSH {R0, R1, LR}	// push the address and value of NUMBER onto the stack
 			BL FIB	
 			POP {R0, R1, LR}	// pop the result and its address
 			STR R0, [R4]		// store the result
@@ -11,9 +11,9 @@ _start:		LDR R4, =RESULT		// load the result address and number value
 END:		B END 			
 
 FIB:		PUSH {R0-R2}		// push the registers to be used 
-			LDR R1, [SP, #16]	// load the index value
+			LDR R1, [SP, #16]	// load the index value NUMBER into SP
 			CMP R1, #2			
-			MOVLT R0, #1		// if index R1 < 2, then move 1 into R0 and go to the end
+			MOVLT R0, #1		// if index R1 < 2, then move 1 into R0 (holds final number) and go to the end
 			BLT END_FIB		
 
 			SUB R1, R1, #1		// decrement n-1
@@ -27,7 +27,7 @@ FIB:		PUSH {R0-R2}		// push the registers to be used
 			BL FIB				// recursive call
 
 			POP {R0, R1, LR}	// pop the indexes back into the registers to add in total
-			ADD R0, R2, R0		// add tge results 
+			ADD R0, R2, R0		// add the results from previous number and current number
 			B END_FIB
 
 END_FIB:	STR R0, [SP, #12]	// store value into the number spot on the stack
