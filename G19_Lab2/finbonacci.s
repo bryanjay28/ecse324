@@ -1,30 +1,39 @@
-            .text
-            .global _start
+			.text
+			.global _start
 
-_start:     LDR R0, NUMBER      // load the number for the fibobacci calculation
-            PUSH {LR}           // store the registers used
-            BL FIB              // link to fibonacci call
-            STR R3, RESULTS     // store the final result
-            POP {LR}            // Pop the LR
-            B END         
+_start:		LDR R4, =RESULT		// load the result address and number value
+			LDR R1, NUMBER			
+			PUSH {R0, R1, LR}	// push the address and value onto the stack
+			BL FIB	
+			POP {R0, R1, LR}	// pop the result and its address
+			STR R0, [R4]		// store the result
 
-FIB:        CMP R0, #2          // compare if index is < 2
-            MOVLT R4, #1        // if true move 1 to R4 (value to add)
-            MOVLT PC, LR        // if true go to last LR
-            SUB R0, R0, #2      
-            PUSH {R0, LR}
-            BL FIB
+END:		B END 			
 
-            SUB R0, R0, #1
-            PUSH {R0, LR}
-            BL FIB
+FIB:		PUSH {R0-R2}		// push the registers to be used 
+			LDR R1, [SP, #16]	// load the index value
+			CMP R1, #2			
+			MOVLT R0, #1		// if index R1 < 2, then move 1 into R0 and go to the end
+			BLT END_FIB		
 
-            ADD R3, R3, R4
-            POP {R0, LR}
-            BX LR
+			SUB R1, R1, #1		// decrement n-1
+			PUSH {R0, R1, LR}	// push the values fib index onto the stack
+			BL FIB				// Recursive call
+			
+			POP {R0,R1,LR}		// pop the past fib index into the registers
+			MOV R2, R0			// save R2 to be added 
+			SUB R1, R1, #1		// decrement for n-2
+			PUSH {R0,R1,LR}		// push the values fib index onto the stack
+			BL FIB				// recursive call
 
-END:        B END
+			POP {R0, R1, LR}	// pop the indexes back into the registers to add in total
+			ADD R0, R2, R0		// add tge results 
+			B END_FIB
+
+END_FIB:	STR R0, [SP, #12]	// store value into the number spot on the stack
+			POP {R0-R2}			// free up the registers 
+			BX LR				// link back to _start pop
 
 
-NUMBER:     .word 8
-RESULT:     .word 0
+NUMBER:		.word	6	
+RESULT:		.word	0	

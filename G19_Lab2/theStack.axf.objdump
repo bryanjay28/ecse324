@@ -1,0 +1,48 @@
+
+//campus.mcgill.ca/EMF/ELE/bjay/Desktop/ecse324/G19_Lab2/theStack.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+            .text
+            .global _start
+
+_start:     LDR R2, =ARRAY
+   0:	e59f2034 	ldr	r2, [pc, #52]	; 3c <ARRAY+0x10>
+
+00000004 <PUSH>:
+            
+PUSH:       LDR R1, [R2, #4]!   // load the second number from array 
+   4:	e5b21004 	ldr	r1, [r2, #4]!
+            STR R2, [SP, #-4]!  // store it at the top of the stack and move the stack pointer
+   8:	e52d2004 	push	{r2}		; (str r2, [sp, #-4]!)
+            LDR R1, [R2, #4]!   // repear above process
+   c:	e5b21004 	ldr	r1, [r2, #4]!
+            STR R1, [SP, #-4]!
+  10:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
+            LDR R1, [R2, #4]!
+  14:	e5b21004 	ldr	r1, [r2, #4]!
+            STR R1, [SP, #-4]! // store the last three numbers in the array
+  18:	e52d1004 	push	{r1}		; (str r1, [sp, #-4]!)
+
+0000001c <POP>:
+
+POP:        LDR R0, [SP], #4
+  1c:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+            LDR R0, [SP], #4
+  20:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+            LDR R0, [SP], #4 // load the same three numbers out of the stack in order from last in first out (reverse)
+  24:	e49d0004 	pop	{r0}		; (ldr r0, [sp], #4)
+
+00000028 <END>:
+
+END:        B END
+  28:	eafffffe 	b	28 <END>
+
+0000002c <ARRAY>:
+  2c:	00000000 	.word	0x00000000
+  30:	0000000a 	.word	0x0000000a
+  34:	00000009 	.word	0x00000009
+  38:	00000030 	.word	0x00000030
+  3c:	0000002c 	.word	0x0000002c

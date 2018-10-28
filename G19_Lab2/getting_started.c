@@ -1,9 +1,9 @@
 int main()
 {
-    int a[5] = {1, 20, 3, 4, 5}; //initiate array of 5 numbers
-    int max_val = 0;            // initiate max_val 
+    int a[5] = {1, 20, 3, 4, 5};
+    int max_val = 0;
 
-    // find the length of the array (number of elements in array)
+    // find the length of the array
     int length = sizeof(a) / sizeof(a[0]);
 
     int i;
@@ -12,7 +12,7 @@ int main()
         // check if the value is greater than the max
         if (max_val < a[i])
         {
-            // if greater than change the max_val
+            // if greater than change the max val
             max_val = a[i];
         }
     }

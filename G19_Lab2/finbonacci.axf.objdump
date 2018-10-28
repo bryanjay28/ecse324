@@ -1,0 +1,82 @@
+
+//campus.mcgill.ca/EMF/ELE/bjay/Desktop/ecse324/G19_Lab2/finbonacci.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+			.text
+			.global _start
+
+_start:		LDR R4, =RESULT		// load the result address and number value
+   0:	e59f4068 	ldr	r4, [pc, #104]	; 70 <RESULT+0x4>
+			LDR R1, NUMBER			
+   4:	e59f105c 	ldr	r1, [pc, #92]	; 68 <NUMBER>
+			PUSH {R0, R1, LR}	// push the address and value onto the stack
+   8:	e92d4003 	push	{r0, r1, lr}
+			BL FIB	
+   c:	eb000002 	bl	1c <FIB>
+			POP {R0, R1, LR}	// pop the result and its address
+  10:	e8bd4003 	pop	{r0, r1, lr}
+			STR R0, [R4]		// store the result
+  14:	e5840000 	str	r0, [r4]
+
+00000018 <END>:
+
+END:		B END 			
+  18:	eafffffe 	b	18 <END>
+
+0000001c <FIB>:
+
+FIB:		PUSH {R0-R2}		// push the registers to be used 
+  1c:	e92d0007 	push	{r0, r1, r2}
+			// MOV R0, #0			// 
+			LDR R1, [SP, #16]	// load the index value
+  20:	e59d1010 	ldr	r1, [sp, #16]
+			CMP R1, #2			
+  24:	e3510002 	cmp	r1, #2
+			MOVLT R0, #1		// if index R1 < 2, then move 1 into R0 and go to the end
+  28:	b3a00001 	movlt	r0, #1
+			BLT END_FIB		
+  2c:	ba00000a 	blt	5c <END_FIB>
+
+			SUB R1, R1, #1		// decrement n-1
+  30:	e2411001 	sub	r1, r1, #1
+			PUSH {R0, R1, LR}	// push the values fib index onto the stack
+  34:	e92d4003 	push	{r0, r1, lr}
+			BL FIB				// Recursive call
+  38:	ebfffff7 	bl	1c <FIB>
+			
+			POP {R0,R1,LR}		// pop the past fib index into the registers
+  3c:	e8bd4003 	pop	{r0, r1, lr}
+			MOV R2, R0			// save R2 to be added 
+  40:	e1a02000 	mov	r2, r0
+			SUB R1, R1, #1		// decrement for n-2
+  44:	e2411001 	sub	r1, r1, #1
+			PUSH {R0,R1,LR}		// push the values fib index onto the stack
+  48:	e92d4003 	push	{r0, r1, lr}
+			BL FIB				// recursive call
+  4c:	ebfffff2 	bl	1c <FIB>
+
+			POP {R0, R1, LR}	// pop the indexes back into the registers to add in total
+  50:	e8bd4003 	pop	{r0, r1, lr}
+			ADD R0, R2, R0		// add tge results 
+  54:	e0820000 	add	r0, r2, r0
+			B END_FIB
+  58:	eaffffff 	b	5c <END_FIB>
+
+0000005c <END_FIB>:
+
+END_FIB:	STR R0, [SP, #12]	// store value into the number spot on the stack
+  5c:	e58d000c 	str	r0, [sp, #12]
+			POP {R0-R2}			// free up the registers 
+  60:	e8bd0007 	pop	{r0, r1, r2}
+			BX LR				// link back to _start pop
+  64:	e12fff1e 	bx	lr
+
+00000068 <NUMBER>:
+  68:	00000006 	.word	0x00000006
+
+0000006c <RESULT>:
+  6c:	00000000 	.word	0x00000000
+  70:	0000006c 	.word	0x0000006c

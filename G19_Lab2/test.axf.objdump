@@ -1,0 +1,91 @@
+
+//campus.mcgill.ca/EMF/ELE/bjay/Desktop/ecse324/G19_Lab2/test.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+			.text
+			.global _start
+
+_start:		LDR R4, =RESULT		//Point to result location, R4 since it is unused by the rest of the program
+   0:	e59f4074 	ldr	r4, [pc, #116]	; 7c <N+0x4>
+			LDR R1, N			//R1 now holds the amount times we want to loop fibonacci
+   4:	e59f106c 	ldr	r1, [pc, #108]	; 78 <N>
+			MOV R0, #0			//initalize the sum
+   8:	e3a00000 	mov	r0, #0
+			PUSH {R0,R1, LR}	//Push everything onto the stack
+   c:	e92d4003 	push	{r0, r1, lr}
+			BL FIB				//calls fibonacci function
+  10:	eb000002 	bl	20 <FIB>
+			POP {R0, R1, LR}	//pop our value into 	
+  14:	e8bd4003 	pop	{r0, r1, lr}
+			STR R0, [R4]		//store R0 (contents) into memory location of R4
+  18:	e5840000 	str	r0, [r4]
+
+0000001c <END>:
+
+END:		B END 			
+  1c:	eafffffe 	b	1c <END>
+
+00000020 <FIB>:
+
+FIB:		PUSH {R0-R3}		//free up the registers
+  20:	e92d000f 	push	{r0, r1, r2, r3}
+			MOV R0, #0			//this would be our sum for fibonacci
+  24:	e3a00000 	mov	r0, #0
+			LDR R1, [SP, #20]	//that would be the number of times we have to recursively call fibonacci 
+  28:	e59d1014 	ldr	r1, [sp, #20]
+			CMP R1, #2			//if less than 2, then return one
+  2c:	e3510002 	cmp	r1, #2
+			BLT EQUAL			//if 1, then we return 1
+  30:	ba00000a 	blt	60 <EQUAL>
+								//else then keep calling
+			SUB R1, R1, #1		//recursive one less time
+  34:	e2411001 	sub	r1, r1, #1
+			PUSH {R0, R1, LR}	//push onto the stack
+  38:	e92d4003 	push	{r0, r1, lr}
+			BL FIB				//call the function again
+  3c:	ebfffff7 	bl	20 <FIB>
+			
+			POP {R0,R1,LR}		//after it was computed, get the information back
+  40:	e8bd4003 	pop	{r0, r1, lr}
+			MOV R2, R0			//save answer to R2
+  44:	e1a02000 	mov	r2, r0
+			SUB R1, R1, #1		//recursive one more time at n-2
+  48:	e2411001 	sub	r1, r1, #1
+			PUSH {R0,R1,LR}		//push on stack
+  4c:	e92d4003 	push	{r0, r1, lr}
+			BL FIB
+  50:	ebfffff2 	bl	20 <FIB>
+
+			POP {R0, R1, LR}	//recover the info
+  54:	e8bd4003 	pop	{r0, r1, lr}
+			ADD R0, R2, R0		//add it to answer from previous fibonacci
+  58:	e0820000 	add	r0, r2, r0
+			B DONE				//done
+  5c:	ea000001 	b	68 <DONE>
+
+00000060 <EQUAL>:
+		
+
+EQUAL:		MOV R0, #1			//set the value to 1
+  60:	e3a00001 	mov	r0, #1
+			B DONE				//done
+  64:	eaffffff 	b	68 <DONE>
+
+00000068 <DONE>:
+
+DONE:		STR R0, [SP, #16]	//store our value in 16.
+  68:	e58d0010 	str	r0, [sp, #16]
+			POP {R0-R3}			//pop everything back in the registers
+  6c:	e8bd000f 	pop	{r0, r1, r2, r3}
+			BX LR				//branch back
+  70:	e12fff1e 	bx	lr
+
+00000074 <RESULT>:
+  74:	00000000 	.word	0x00000000
+
+00000078 <N>:
+  78:	00000006 	.word	0x00000006
+  7c:	00000074 	.word	0x00000074

@@ -1,0 +1,82 @@
+
+//campus.mcgill.ca/EMF/ELE/bjay/Desktop/ecse324/G19_Lab2/findMax.axf:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <__cs3_interrupt_vector>:
+            .text
+            .global _start
+
+_start:     LDR R2, =NUMBERS
+   0:	e59f207c 	ldr	r2, [pc, #124]	; 84 <NUMBERS+0x20>
+            LDR R1, N
+   4:	e59f1054 	ldr	r1, [pc, #84]	; 60 <N>
+            LDR R0, RESULT
+   8:	e59f004c 	ldr	r0, [pc, #76]	; 5c <RESULT>
+            PUSH {R0-R2, LR}    // push the used parameter onto the stack and the LR
+   c:	e92d4007 	push	{r0, r1, r2, lr}
+            BL MAX              
+  10:	eb000004 	bl	28 <MAX>
+            LDR R3, [SP]        // get the resulting maximum from the SP
+  14:	e59d3000 	ldr	r3, [sp]
+            STR R3, RESULT      // store the maximum into RESULT
+  18:	e58f303c 	str	r3, [pc, #60]	; 5c <RESULT>
+            LDR LR, [SP, #12]   // restore LR
+  1c:	e59de00c 	ldr	lr, [sp, #12]
+            ADD SP, SP, #16     // retore the SP to be empty 
+  20:	e28dd010 	add	sp, sp, #16
+
+00000024 <END>:
+END:        B END
+  24:	eafffffe 	b	24 <END>
+
+00000028 <MAX>:
+
+MAX:        PUSH {R0-R3}
+  28:	e92d000f 	push	{r0, r1, r2, r3}
+            LDR R0, [SP, #16]   // load the result starting at 0
+  2c:	e59d0010 	ldr	r0, [sp, #16]
+            LDR R1, [SP, #20]   // total number of elements in the array
+  30:	e59d1014 	ldr	r1, [sp, #20]
+            LDR R2, [SP, #24]   // location of the array
+  34:	e59d2018 	ldr	r2, [sp, #24]
+
+00000038 <LOOP>:
+LOOP:       LDR R3, [R2], #4    // load the content of the address and iterate through the array
+  38:	e4923004 	ldr	r3, [r2], #4
+            CMP R0, R3          // compare whether the number is greater than the current max
+  3c:	e1500003 	cmp	r0, r3
+            BGE DECREMENT       // R0>=R3, go to DECREMENT, else
+  40:	aa000000 	bge	48 <DECREMENT>
+            MOV R0, R3          // change the maximum
+  44:	e1a00003 	mov	r0, r3
+
+00000048 <DECREMENT>:
+DECREMENT:  SUBS R1, R1, #1     // decrement the counter
+  48:	e2511001 	subs	r1, r1, #1
+            BGT LOOP            // if counter is greater than 0 then go to the loop
+  4c:	cafffff9 	bgt	38 <LOOP>
+            STR R0, [SP, #16]   // else, iteration is complete and store the max
+  50:	e58d0010 	str	r0, [sp, #16]
+            POP {R0-R3}        // pop the used registers
+  54:	e8bd000f 	pop	{r0, r1, r2, r3}
+            BX LR              
+  58:	e12fff1e 	bx	lr
+
+0000005c <RESULT>:
+  5c:	00000000 	.word	0x00000000
+
+00000060 <N>:
+  60:	00000007 	.word	0x00000007
+
+00000064 <NUMBERS>:
+  64:	00000005 	.word	0x00000005
+  68:	00000055 	.word	0x00000055
+  6c:	00000040 	.word	0x00000040
+  70:	00000015 	.word	0x00000015
+  74:	00000000 	.word	0x00000000
+  78:	0000002a 	.word	0x0000002a
+  7c:	00000057 	.word	0x00000057
+  80:	00000002 	.word	0x00000002
+  84:	00000064 	.word	0x00000064
