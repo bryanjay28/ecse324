@@ -9,7 +9,7 @@
 	}	PB_t;
 	
 	/* These subroutines only access the pushbutton data register */
-	extern int read_PD_data_ASM();
+	extern int read_PB_data_ASM();
 	extern int PB_data_is_pressed_ASM(PB_t PB);
 	
 	/* These subroutines only access the pushbutton edge capture register */
