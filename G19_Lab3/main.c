@@ -7,7 +7,7 @@
 #include "./drivers/inc/pushbuttons.h"
 
 int main () {
-
+/*
 	// initialize timer 1
 	HPS_TIM_config_t hps_tim;
 
@@ -86,9 +86,8 @@ int main () {
 			}
 		}
 	}
+*/
 
-
-/*
 	while(1) {
 		int switch_val = read_slider_switches_ASM();
 		write_LEDs_ASM(switch_val);
@@ -102,6 +101,5 @@ int main () {
 			HEX_write_ASM(hex_numb, disp_numb);
 		}
 	}
-*/
 	return 0;
 }

@@ -63,7 +63,7 @@ int main() {
 			if(fpga_pb_int_flag == 0){
 				timer_on = 1;
 			}
-			// if the interrupt is pb 1 then stop timer
+			// if the interrupt is pb 1 then stop timer 
 			if(fpga_pb_int_flag == 1){
 				timer_on = 0;
 			}
@@ -78,6 +78,7 @@ int main() {
 				// reset all the displays to show 0
 				HEX_write_ASM(HEX0 | HEX1 | HEX2 | HEX3 | HEX4 | HEX5, 0);
 			}
+			// reset the interrupt flag
 			fpga_pb_int_flag = 4;
 
 		}
