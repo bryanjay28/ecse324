@@ -10,48 +10,42 @@ int main()
 	HPS_TIM_config_t hps_tim;
 
 	hps_tim.tim = TIM0;
-	hps_tim.timeout = 1000000;
+	hps_tim.timeout = 1000;
 	hps_tim.LD_en = 1;
-	hps_tim.INT_en = 0;
+	hps_tim.INT_en = 1;
 	hps_tim.enable = 1;
 
 	HPS_TIM_config_ASM(&hps_tim);
 
 	// initialize second timer to check push buttons
-	HPS_TIM_config_t hps_tim;
+	HPS_TIM_config_t hps_tim_pb;
 
-	hps_tim.tim = TIM1;
-	hps_tim.timeout = 5000;
-	hps_tim.LD_en = 1;
-	hps_tim.INT_en = 0;
-	hps_tim.enable = 1;
+	hps_tim_pb.tim = TIM1;
+	hps_tim_pb.timeout = 5000;
+	hps_tim_pb.LD_en = 1;
+	hps_tim_pb.INT_en = 1;
+	hps_tim_pb.enable = 1;
 
-	HPS_TIM_config_ASM(&hps_tim);
+	HPS_TIM_config_ASM(&hps_tim_pb);
 
 	int ms = 0, sec = 0, min = 0, timer_on = 0;
-	while (1)
-	{
-		if (HPS_TIM_read_INT_ASM(TIM0))
-		{
+	while (1) {
+		if (HPS_TIM_read_INT_ASM(TIM0) && timer_on) {
 			HPS_TIM_clear_INT_ASM(TIM0);
 			// count in increments of 10 ms
 			ms += 10;
-
 			// 1000ms = 1s so we increment seconds and reset ms
-			if (ms >= 1000)
-			{
+			if (ms >= 1000){
 				ms -= 1000;
 				sec++;
 			}
 			// 1s = 1min so we increment minutes and reset sec
-			if (sec >= 60)
-			{
+			if (sec >= 60){
 				sec -= 60;
 				min++;
 			}
 			// reset minutes if it goes above 60
-			if (min >= 60)
-			{
+			if (min >= 60){
 				min -= 60;
 			}
 
@@ -65,25 +59,20 @@ int main()
 		}
 
 		// timer to read push buttons
-		if (HPS_TIM_read_ASM(TIM1))
-		{
+		if (HPS_TIM_read_INT_ASM(TIM1)){
 			HPS_TIM_clear_INT_ASM(TIM1);
 			int read_btn_press = 0xF & read_PB_data_ASM();
 			// button 0 is pressed (start)
-			if (0x1 & read_btn_press)
-			{
+			if (0x1 & read_btn_press){
 				// set timer_on to true
 				timer_on = 1;
 			}
 			// button 1 is pressed (stop)
-			else if (0x2 & read_btn_press)
-			{
+			else if (0x2 & read_btn_press){
 				// set timer_on to false
 				timer_on = 0;
 			}
-			else if (0x4 & read_btn_press)
-			{
-
+			else if (0x4 & read_btn_press){
 				// reset all values and set timer_on to false
 				ms = 0;
 				sec = 0;
@@ -94,6 +83,7 @@ int main()
 			}
 		}
 	}
+	return 0;
 }
 
 /*
