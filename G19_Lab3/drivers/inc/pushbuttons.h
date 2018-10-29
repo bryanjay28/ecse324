@@ -3,9 +3,9 @@
 
 	typedef enum {
 		PB0 = 0x00000001,
-		PB2 = 0x00000002,
-		PB3 = 0x00000004,
-		PB4 = 0x00000008
+		PB1 = 0x00000002,
+		PB2 = 0x00000004,
+		PB3 = 0x00000008
 	}	PB_t;
 	
 	/* These subroutines only access the pushbutton data register */

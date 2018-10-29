@@ -55,46 +55,38 @@ HPS_TIM3_ISR:
 	
 FPGA_INTERVAL_TIM_ISR:
 	BX LR
-	
+
 FPGA_PB_KEYS_ISR:
 	PUSH {LR}
-	LDR R1, =0xFF200050		// load the base address
-	LDR R2, [R1, #0xC]		// load the edgecap address
-	MOV R0, #0xF			// move all 1's to address of edgecapture in order to reset it  
-	STR R0, [R1, #0xC]		// clear the edgecap 
-	LDR R0, =hps_tim0_int_flag	// load the flag used in example 1 return if a button was pressed 
+	LDR R0, =0xFF200050			// load the base address
+	LDR R1, [R0, #0xC]			// load the edgecap address
+	STR R1, [R0, #0xC]			// clear the edgecap 
+	LDR R0, =fpga_pb_int_flag	// load the flag used in example 1 return if a button was pressed 
 
 PB0_CHECK:
-	MOV R3, #0x1 			// since one hot encoded button one is at bit 1
-	AND R3, R3, R1			// check if it is button 0
-	CMP R3, R1				
+	MOV R3, #0x1				// since one hot encoded button one is at bit 1
+	ANDS R3, R1 				// check if it is button 0
 	BEQ PB1_CHECK
-	MOV R2, #0				// return button number that was pressed
-	STR R2, [R0]			// store it into the timer flag
+	MOV R2, #0					// return button number that was pressed
+	STR R2, [R0] 				// store it into the timer flag
 	B END_PB
-
 PB1_CHECK:
-	MOV R3, #0x2			// encoding for pb 1
-	AND R3, R3, R1			// check if button is 1
-	CMP R3, R1
+	MOV R3, #0x2				// encoding for pb 1
+	ANDS R3, R1 				// check if button is 1
 	BEQ PB2_CHECK
-	MOV R2, #1				// return button number that was pressed
-	STR R2, [R0]			// store it into the timer flag
+	MOV R2, #1					// return button number that was pressed
+	STR R2, [R0]				// store it into the timer flag
 	B END_PB
-
 PB2_CHECK:
-	MOV R3, #0x4			// encoding for pb 2
-	AND R3, R3, R1			// check if button is 2
-	CMP R3, R1
+	MOV R3, #0x4				// encoding for pb 2
+	ANDS R3, R1 				// check if button is 2
 	BEQ PB3_CHECK
-	MOV R2, #1				// return button number that was pressed
-	STR R2, [R0]			// store it into the timer flag
+	MOV R2, #2					// return button number that was pressed
+	STR R2, [R0] 				// store it into the timer flag
 	B END_PB
-
 PB3_CHECK:
-	MOV R2, #1				// return button number that was pressed
-	STR R2, [R0]			// store it into the timer flag
-
+	MOV R2, #3					// return button number that was pressed
+	STR R2, [R0] 				// store it into the timer flag
 END_PB:
 	POP {LR}
 	BX LR
