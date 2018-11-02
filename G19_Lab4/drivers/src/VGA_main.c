@@ -1,33 +1,13 @@
 #include <stdio.h>
 
-#include "../inc/pushbuttons.h"
-#include "../inc/VGA.h"
+#include "../../drivers/inc/pushbuttons.h"
+#include "../../drivers/inc/VGA.h"
+#include "../../drivers/inc/slider_switches.h"
 
-int main() {
-    while(1) {
-        int read_btn_press = 0xF & read_PB_data_ASM();
-        // button 0 is pressed 
-		if (0x1 & read_btn_press) {
-		    int switch_val = read_slider_switches_ASM();
-            if(switch_val != 0x000) {
-                test_char();
-            } else {
-                test_byte();
-            }
-		// button 1 is pressed 		
-        } else if (0x2 & read_btn_press) {
-            test_pixel();
-		// button 2 is pressed 
-		} else if (0x4 & read_btn_press) {
-            VGA_clear_charbuff_ASM();
-        // button 3 is pressed 
-		} else if (0x8 & read_btn_press) {
-            VGA_clear_pixelbuff_ASM();
-        }
-    }
-    
-    return 0;
-}
+void test_char();
+void test_byte();
+void test_pixel();
+
 
 
 void test_char() {
@@ -62,3 +42,30 @@ void test_pixel() {
         }
     }
 }
+
+int main() {
+    while(1) {
+        int read_btn_press = 0xF & read_PB_data_ASM();
+        // button 0 is pressed 
+		if (0x1 & read_btn_press) {
+		    int switch_val = read_slider_switches_ASM();
+            if(switch_val != 0x000) {
+                test_char();
+            } else {
+                test_byte();
+            }
+		// button 1 is pressed 		
+        } else if (0x2 & read_btn_press) {
+            test_pixel();
+		// button 2 is pressed 
+		} else if (0x4 & read_btn_press) {
+            VGA_clear_charbuff_ASM();
+        // button 3 is pressed 
+		} else if (0x8 & read_btn_press) {
+            VGA_clear_pixelbuff_ASM();
+        }
+    }
+    
+    return 0;
+}
+

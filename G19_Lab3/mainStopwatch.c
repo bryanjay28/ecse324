@@ -10,7 +10,7 @@ int main()
 	HPS_TIM_config_t hps_tim;
 
 	hps_tim.tim = TIM0;
-	hps_tim.timeout = 1000; //speed of timer 1
+	hps_tim.timeout = 10000; //speed of timer 1
 	hps_tim.LD_en = 1;
 	hps_tim.INT_en = 1;
 	hps_tim.enable = 1;
@@ -28,6 +28,7 @@ int main()
 
 	HPS_TIM_config_ASM(&hps_tim_pb);
 
+	HEX_write_ASM(HEX0 | HEX1 | HEX2 | HEX3 | HEX4 | HEX5, 0);
 	int ms = 0, sec = 0, min = 0, timer_on = 0;
 	while (1) {
 		if (HPS_TIM_read_INT_ASM(TIM0) && timer_on) {

@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "../inc/VGA.h"
-#include "../inc/ps2_keyboard"
+#include "../inc/ps2_keyboard.h"
 
 int main() {
     int x = 0, y = 0;

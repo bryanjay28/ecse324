@@ -17,7 +17,7 @@ int main(){
 	HPS_TIM_config_t hps_tim;
 
 	hps_tim.tim = TIM0;
-	hps_tim.timeout = 1000; //10 ms
+	hps_tim.timeout = 10000; //10 ms
 	hps_tim.LD_en = 1;
 	hps_tim.INT_en = 1;
 	hps_tim.enable = 1;
