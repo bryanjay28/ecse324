@@ -6,22 +6,22 @@
 
 int main()
 {
-	// initialize timer 1
+	// initialize timer 1 to count time
 	HPS_TIM_config_t hps_tim;
 
 	hps_tim.tim = TIM0;
-	hps_tim.timeout = 1000;
+	hps_tim.timeout = 1000; //speed of timer 1
 	hps_tim.LD_en = 1;
 	hps_tim.INT_en = 1;
 	hps_tim.enable = 1;
 
 	HPS_TIM_config_ASM(&hps_tim);
 
-	// initialize second timer to check push buttons
+	// initialize second timer to check (poll) push buttons edgecapture register
 	HPS_TIM_config_t hps_tim_pb;
 
 	hps_tim_pb.tim = TIM1;
-	hps_tim_pb.timeout = 5000;
+	hps_tim_pb.timeout = 5000; //speed of timer 2
 	hps_tim_pb.LD_en = 1;
 	hps_tim_pb.INT_en = 1;
 	hps_tim_pb.enable = 1;
@@ -31,7 +31,7 @@ int main()
 	int ms = 0, sec = 0, min = 0, timer_on = 0;
 	while (1) {
 		if (HPS_TIM_read_INT_ASM(TIM0) && timer_on) {
-			HPS_TIM_clear_INT_ASM(TIM0);
+			HPS_TIM_clear_INT_ASM(TIM0);		//if timer already running, clear
 			// count in increments of 10 ms
 			ms += 10;
 			// 1000ms = 1s so we increment seconds and reset ms
@@ -50,7 +50,7 @@ int main()
 			}
 
 			// find the appropriate values for the hex displays
-			HEX_write_ASM(HEX0, (ms % 100) / 10);
+			HEX_write_ASM(HEX0, (ms % 100) / 10); //finds the two values for the number for each HEX display
 			HEX_write_ASM(HEX1, ms / 100);
 			HEX_write_ASM(HEX2, sec % 10);
 			HEX_write_ASM(HEX3, sec / 10);
