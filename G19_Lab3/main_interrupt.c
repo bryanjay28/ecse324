@@ -12,7 +12,7 @@ int main() {
 	// enable the interrupts for pushbuttons
 	enable_PB_INT_ASM(PB0 | PB2 | PB3);
 	
-	// initialize time parameters
+	// initialize timer
 	HPS_TIM_config_t hps_tim;
 
 	hps_tim.tim = TIM0;
@@ -27,6 +27,7 @@ int main() {
 
 	int ms = 0, sec = 0, min = 0, timer_on = 1;
 	while(1) {
+		// check if when the interupt occurs
 		if(hps_tim0_int_flag) {
 			hps_tim0_int_flag = 0;
 			if (HPS_TIM_read_INT_ASM(TIM0) && timer_on) {
