@@ -7,12 +7,6 @@
 #include "./drivers/inc/pushbuttons.h"
 
 
-<<<<<<< HEAD
-	// enable the interrupts for pushbuttons
-	enable_PB_INT_ASM(PB0 | PB2 | PB3);
-	
-	// initialize timer
-=======
 int main(){
 	// enable interupts for push buttons and hps timer 0
 	int_setup(2, (int []) {73, 199});
@@ -20,7 +14,6 @@ int main(){
 	enable_PB_INT_ASM(PB0 | PB1 | PB2);	
 
 	// initialize timer parameters
->>>>>>> 41e33b6701ba712321c4fdad7df4bdda116c6076
 	HPS_TIM_config_t hps_tim;
 
 	hps_tim.tim = TIM0;
@@ -36,13 +29,8 @@ int main(){
 	// initialize all the variables to be used 
 	int ms = 0, sec = 0, min = 0, timer_on = 0;
 	while(1) {
-<<<<<<< HEAD
-		// check if when the interupt occurs
-		if(hps_tim0_int_flag) {
-=======
 		// check if the timer interrupt occurs
 		if(hps_tim0_int_flag) { 
->>>>>>> 41e33b6701ba712321c4fdad7df4bdda116c6076
 			hps_tim0_int_flag = 0;
 
 			if(timer_on) {
