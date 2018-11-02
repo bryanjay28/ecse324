@@ -1,7 +1,7 @@
 #include <stdio.h>
 
-#include "./drivers/inc/LEDs.h"
-#include "./drivers/inc/slider_switches.h"
+#include "./drivers/inc/LEDs.h"			//header files
+#include "./drivers/inc/slider_switches.h"	// for drivers
 #include "./drivers/inc/HPS_TIM.h"
 #include "./drivers/inc/HEX_displays.h"
 #include "./drivers/inc/pushbuttons.h"
