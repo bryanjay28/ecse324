@@ -62,11 +62,11 @@ int main(){
 		}
 		// check if interrupt occurs from one of the buttons
 		if (fpga_pb_int_flag != 4) { 
-			// if the interrupt is pb 0 then start timer
+			// if there is an interrupt at pb 0 then start timer
 			if (fpga_pb_int_flag == 0) { 
 				timer_on = 1;
 			} 
-			// if the interrupt is pb 1 then stop timer
+			// if there is an interrupt at pb 1 then stop timer
 			else if (fpga_pb_int_flag == 1) {
 				timer_on = 0;
 			} 
