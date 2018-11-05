@@ -28,8 +28,8 @@ int main()
 
 	HPS_TIM_config_ASM(&hps_tim_pb);
 
-	HEX_write_ASM(HEX0 | HEX1 | HEX2 | HEX3 | HEX4 | HEX5, 0);
-	int ms = 0, sec = 0, min = 0, timer_on = 0;
+	HEX_write_ASM(HEX0 | HEX1 | HEX2 | HEX3 | HEX4 | HEX5, 0); //write all values as 0 , initialize
+	int ms = 0, sec = 0, min = 0, timer_on = 0;		   //all timer counts to 0
 	while (1) {
 		if (HPS_TIM_read_INT_ASM(TIM0) && timer_on) {
 			HPS_TIM_clear_INT_ASM(TIM0);		//if timer already running, clear
@@ -51,8 +51,8 @@ int main()
 			}
 
 			// find the appropriate values for the hex displays
-			HEX_write_ASM(HEX0, (ms % 100) / 10); //finds the two values for the number for each HEX display
-			HEX_write_ASM(HEX1, ms / 100);
+			HEX_write_ASM(HEX0, (ms % 100) / 10); //finds the two values for the 
+			HEX_write_ASM(HEX1, ms / 100);	      //number for each HEX display
 			HEX_write_ASM(HEX2, sec % 10);
 			HEX_write_ASM(HEX3, sec / 10);
 			HEX_write_ASM(HEX4, min % 10);
@@ -61,20 +61,20 @@ int main()
 
 		// timer to read push buttons
 		if (HPS_TIM_read_INT_ASM(TIM1)){
-			HPS_TIM_clear_INT_ASM(TIM1);
+			HPS_TIM_clear_INT_ASM(TIM1); 		//resets timer to continously poll each time
 			int read_btn_press = 0xF & read_PB_data_ASM();
-			// button 0 is pressed (start)
+				// if button 0 is pressed (start)
 			if (0x1 & read_btn_press){
 				// set timer_on to true
 				timer_on = 1;
 			}
-			// button 1 is pressed (stop)
+				// button 1 is pressed (stop)
 			else if (0x2 & read_btn_press){
 				// set timer_on to false
 				timer_on = 0;
 			}
 			else if (0x4 & read_btn_press){
-				// reset all values and set timer_on to false
+				// if button 2 pressed, reset all counter values and set timer_on to false
 				ms = 0;
 				sec = 0;
 				min = 0;
@@ -86,54 +86,3 @@ int main()
 	}
 	return 0;
 }
-
-/*
-int main () {
-	int count0 = 0, count1 = 0, count2 = 0, count3 = 0;
-
-	HPS_TIM_config_t hps_tim;
-	
-	hps_tim.tim = TIM0|TIM1|TIM2|TIM3;
-	hps_tim.timeout = 1000000;
-	hps_tim.LD_en = 1;
-	hps_tim.INT_en = 1;
-	hps_tim.enable = 1;
-	
-	HPS_TIM_config_ASM(&hps_tim);
-	
-	while(1) {
-		if(HPS_TIM_read_INT_ASM(TIM0)){
-			HPS_TIM_clear_INT_ASM(TIM0);
-			if(++count0 == 16){
-				count0 = 0;
-			}
-			HEX_write_ASM(HEX0, count0);
-		}
-		
-		if(HPS_TIM_read_INT_ASM(TIM1)){
-			HPS_TIM_clear_INT_ASM(TIM1);
-			if(++count1 == 16){
-				count1 = 0;
-			}
-			HEX_write_ASM(HEX1, count1);
-		}
-		
-		if(HPS_TIM_read_INT_ASM(TIM2)){
-			HPS_TIM_clear_INT_ASM(TIM2);
-			if(++count2 == 16){
-				count2 = 0;
-			}
-			HEX_write_ASM(HEX2, count2);
-		}
-		
-		if(HPS_TIM_read_INT_ASM(TIM3)){
-			HPS_TIM_clear_INT_ASM(TIM3);
-			if(++count3 == 16){
-				count3 = 0;
-			}
-			HEX_write_ASM(HEX3, count3);
-		}
-	}
-	return 0;
-}
-*/
