@@ -7,7 +7,7 @@
 	.global HPS_TIM_config_ASM
 	.global HPS_TIM_clear_INT_ASM
 	.global HPS_TIM_read_INT_ASM
-
+					//takes structer pointer as argument
 HPS_TIM_config_ASM:
 	PUSH {R4-R7, LR}
 	MOV R1, #0
