@@ -8,7 +8,7 @@ read_PS2_data_ASM:
         LDR R1, =PS2_DATA
         LDR R2, [R1]        // get the value of stored in keyboard data
 
-        TST R2, #8000       // check the RVALID bit if its 0
+        TST R2, #0x8000       // check the RVALID bit if its 0
         MOVEQ R0, #0        // if RVALID BIT is 0 then return 0 and brancg to end
         BEQ END_PS2
         AND R2, R2, #0xFF   // get the data from the first 8-bits
