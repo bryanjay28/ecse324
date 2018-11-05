@@ -12,7 +12,7 @@ HEX_clear_ASM:	PUSH {LR}					//turn off all segments of all hex displays passed 
 				MOV R4, #1				// compare with each bit to get hex number since one hot encoded
 				MOV R6, #0				// clear bit 
 
-LOOP_BOTTOM:	CMP R3, #2
+LOOP_BOTTOM:	CMP R3, #2					//clears HEX0-3
 				BEQ LOOP_TOP
 				ANDS R5, R4, R0 		// check which bit is 1 since to get the hex display
 				BEQ BOTTOM		// if R5 > 0, then go to clear
@@ -23,7 +23,7 @@ BOTTOM:			LSL R4, #1				// shift #1 bit to the left to check the next bit value
 				SUBS R3, R3, #1			// decrement the counter 
 				BGT LOOP_BOTTOM			// if the value is > 0, then keep looping
 
-LOOP_TOP:		CMP R3, #0				// compare with 0 to determine end of the loops
+LOOP_TOP:		CMP R3, #0				//clears HEX4-5 compare with 0 to determine end of the loops
 				BEQ END					// if 0, go to the end
 				ANDS R5, R4, R0			// repeat process from above
 				BEQ TOP
