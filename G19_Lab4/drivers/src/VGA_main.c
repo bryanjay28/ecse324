@@ -47,12 +47,12 @@ int main() {
     while(1) {
         int read_btn_press = 0xF & read_PB_data_ASM();
         // button 0 is pressed 
-		if (0x1 & read_btn_press) {
+	if (0x1 & read_btn_press) {
 		    int switch_val = read_slider_switches_ASM();
             if(switch_val != 0x000) {
-                test_char();
-            } else {
                 test_byte();
+            } else {
+                test_char();
             }
 		// button 1 is pressed 		
         } else if (0x2 & read_btn_press) {
