@@ -3,7 +3,7 @@
 		.equ	PS2_CONTROL, 0xFF200104
         .global read_PS2_data_ASM
 
-read_PS2_data_ASM:
+read_PS2_data_ASM:		//checks if RVALID bit is 0 or 1
         PUSH {R1-R2, LR}
         LDR R1, =PS2_DATA
         LDR R2, [R1]        // get the value of stored in keyboard data
@@ -11,7 +11,7 @@ read_PS2_data_ASM:
         TST R2, #0x8000       // check the RVALID bit if its 0
         MOVEQ R0, #0        // if RVALID BIT is 0 then return 0 and brancg to end
         BEQ END_PS2
-        AND R2, R2, #0xFF   // get the data from the first 8-bits
+        AND R2, R2, #0xFF   // get the data from the first 8-bits (0-7)
         STR R2, [R0]        // store the value into the given address
         MOV R0, #1          // return 1 
 
