@@ -19,7 +19,7 @@ void displayWave(float freq);
 int amplitude = 1; // volume
 char previous;	// previsou keyboard value
 float frequency[8] = {130.813, 146.832, 164.814, 174.614, 195.998, 220.000, 246.942, 261.626};
-int pressed[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+int pressed[8] = {0, 0, 0, 0, 0, 0, 0, 0};	// boolean value to keep track if keys were pressed
 
 
 int main() {
@@ -130,7 +130,7 @@ void displayWave(float freq) {
 // return the note associated with its respective key
 float getNote(char *data) {
 	// initialize the freq variable
-	float freq = 0;
+	float freq;
 
 	switch(*data) {
 		// keyboard for value + gives volume up
@@ -222,7 +222,10 @@ float getNote(char *data) {
 		default:
 		break;
 	}
-	// cal
+	// calculate the frequency
+	for(int i = 0; i<8; i++) {
+		freq +=pressed[i]*frequency[i];
+	}
 
 	// return calculated frequency
 	return freq;
