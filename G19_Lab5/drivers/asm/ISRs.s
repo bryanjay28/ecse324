@@ -23,7 +23,17 @@ HPS_GPIO1_ISR:
 	BX LR
 	
 HPS_TIM0_ISR:
-	BX LR
+	PUSH {LR}
+
+	MOV	R0, #0x1				// Get the address of tim0
+	BL HPS_TIM_clear_INT_ASM	// Clear the interrupt flag from the timer (tim0)
+
+	LDR R0, =hps_tim0_int_flag	// Load the register of the interrupt variable into R0
+	MOV R1, #1					// Move 1 to register R1 to store
+	STR R1, [R0]				// Store 1 into the interrupt variable when there is an interrupt
+
+	POP {LR}				
+	BX LR						//Return
 	
 HPS_TIM1_ISR:
 	BX LR

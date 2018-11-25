@@ -19,4 +19,7 @@
 	extern void FPGA_JP2_ISR();
 	extern void FPGA_PS2_DUAL_ISR();
 
+	// initialize variable to hold the interrupt value
+	extern int hps_tim0_int_flag;
+
 #endif
