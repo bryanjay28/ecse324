@@ -29,7 +29,7 @@ int main() {
 	// initialize timer used to feed generated samples
 	HPS_TIM_config_t hps_tim;
 	hps_tim.tim = TIM0;
-	hps_tim.timeout = 21; //speed of timer 1 1/48000
+	hps_tim.timeout = 20; //speed of timer 1 1/48000
 	hps_tim.LD_en = 1;
 	hps_tim.INT_en = 1;
 	hps_tim.enable = 1;
@@ -51,6 +51,7 @@ int main() {
 				freq = getNote(data);
 				// draw the wave onto the screen to display the notes played
 				displayWave(freq);
+
 				
 				// check when the stop code is present to know when key is released
 				if(previous == 0xF0) {
@@ -99,28 +100,26 @@ int signal(float freq, int time) {
 void displayWave(float freq) {
 	// clear the display before drawing the next wave
 	VGA_clear_pixelbuff_ASM();
-
 	// initialize the colour and position
 	short colour = 0xFFFFFF;
-	int x = 0, y = 0;
+	int x, y;
 	// 48000 us the total sine wave, divide this by the number of x pixels with a frequency of 60 Hx
-	int seg = 48000/(320*60/freq);
+	int seg = 48000/(320.00*60/freq);
 	// initialize x position 
 	int time_pos = 0;
 
 	// iterate through the display to print out the wave
 	for(x=0; x<320; x++) {
 		// use a sine function in order to calculate the y pixel to draw the pt on 
-		y = (int) (amplitude*sine[time_pos]*(10/sine[6000])) + 120;
+		y = (int) (((float)amplitude)*(float)sine[time_pos]*((float)10/(float)sine[6000])) + 120;
 
 		// draw calculated point in white
 		VGA_draw_point_ASM(x, y, colour);
-
 		// Increment position based on the increment variable. 
 		time_pos += seg; 	
 		//Resets the sine wave to the beginning of the period. 
-		if (seg > 48000) {
-			seg -= 48000; 
+		if (time_pos > 48000) {
+			time_pos -= 48000; 
 		} 
 	}
 
@@ -222,8 +221,9 @@ float getNote(char *data) {
 		default:
 		break;
 	}
+	int i;
 	// calculate the frequency
-	for(int i = 0; i<8; i++) {
+	for(i = 0; i<8; i++) {
 		freq +=pressed[i]*frequency[i];
 	}
 
