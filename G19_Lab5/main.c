@@ -12,13 +12,15 @@
 
 // implicit declarations
 int signal(float freq, int time);
-float getNote(char *data, int clock);
+float getNote(char *data);
+float calculateSignal(int time);
 void displayWave(float freq);
 
 // initialize global variables 
 int amplitude = 1; // volume
 char previous;	// previsou keyboard value
 float frequency[8] = {130.813, 146.832, 164.814, 174.614, 195.998, 220.000, 246.942, 261.626};
+
 int pressed[8] = {0, 0, 0, 0, 0, 0, 0, 0};	// boolean value to keep track if keys were pressed
 
 
@@ -41,6 +43,7 @@ int main() {
 	float freq; // freq of notes
 	char *data;
 	int clock = 0; // keeps track of clock time 
+	float note;	// sum of the signal
 
 	while(1) {
 		// read the data from the keyboard
@@ -48,11 +51,10 @@ int main() {
 			// check if the previous frequency changed
 			if(previous != *data) {
 				// get the frequency for the note of the keyboard clicks
-				freq = getNote(data, clock);
+				freq = getNote(data);
 				// draw the wave onto the screen to display the notes played
 				displayWave(freq);
 
-				
 				// check when the stop code is present to know when key is released
 				if(previous == 0xF0) {
 					// allow the same key to be clicked simultaneously
@@ -63,11 +65,12 @@ int main() {
 				}
 			}
 		}
+		note = calculateSignal(clock);
 
-		// write the audio data to the signal
-		audio_write_data_ASM(signal(freq, clock), signal(freq, clock));
 		// check interrupt happens 
 		if(hps_tim0_int_flag) {
+		// write the audio data to the signal
+			audio_write_data_ASM(note, note);
 			// increment clock value
 			clock++;	
 			// reset the clock when it reaches the e
@@ -81,31 +84,30 @@ int main() {
 	return 0;
 }
 
-// calculate the signal without the remainder
-// float formerSignal(float freq, int time) {
-// 	// find the modulating value
-// 	int index = (((int)freq) * time)%48000;
-// 	double signal = sine[index];
-// 	return signal;
-// }
-
 // calculate the signal of all the frequency signals
-float calculateSignal(char* key_press, int t) {
+float calculateSignal(int time) {
 	int i;
-	double note = 0;
-	// loop through all keys and check if key i pressed
+	float note = 0;
+	// loop through all keys and check if key is pressed
 	for(i = 0; i < 8; i++){
-		if(key_press[i] == 1){
-			// Sum all frequency samples
-			note += signal(frequency[i], t);
-			//data += getSample(frequencies[i], t);
+		if(pressed[i] == 1){
+			note += signal(frequency[i], time);
 		}
 	}
+
+	note *= amplitude;
 	return note;
 }
 
 // calculate the signal played from wavetable give a time and frequency
 int signal(float freq, int time) {
+/*
+	int index = (((int)freq) * time)%48000;
+	double signal = sine[index];
+
+	return signal;
+*/
+
 	// calculate the floating value for the index
 	float a = (freq*time);
 	int b = (int) a/48000;
@@ -117,6 +119,7 @@ int signal(float freq, int time) {
 	// calculate the signal by multiplying by the sound amplitude
 	float total = (1-remain)*sine[integer] + remain*sine[integer+1];
 	return (int) (total*amplitude);
+
 }
 
 // display the wave onto the screen when keys are pressed
@@ -150,9 +153,9 @@ void displayWave(float freq) {
 }
 
 // return the note associated with its respective key
-float getNote(char *data, int clock) {
+float getNote(char *data) {
 	// initialize the freq variable
-	float note;
+	float freq;
 
 	switch(*data) {
 		// keyboard for value + gives volume up
@@ -244,23 +247,11 @@ float getNote(char *data, int clock) {
 		default:
 		break;
 	}
-	// int i;
-	// // calculate the frequency
-	// for(i = 0; i<8; i++) {
-	// 	freq +=pressed[i]*frequency[i];
-	// }
 	int i;
-	// loop through all keys and check if key i pressed
-	for(i = 0; i < 8; i++){
-		if(pressed[i] == 1){
-			// Sum all frequency samples
-			note += signal(frequency[i], time);
-		}
+	// calculate the frequency
+	for(i = 0; i<8; i++) {
+		freq +=pressed[i]*frequency[i];
 	}
 	// return calculated note
-	return note;
+	return freq;
 }
-
-
-
-
