@@ -12,7 +12,7 @@
 
 // implicit declarations
 int signal(float freq, int time);
-float getNote(char *data);
+float getNote(char *data, int clock);
 void displayWave(float freq);
 
 // initialize global variables 
@@ -48,7 +48,7 @@ int main() {
 			// check if the previous frequency changed
 			if(previous != *data) {
 				// get the frequency for the note of the keyboard clicks
-				freq = getNote(data);
+				freq = getNote(data, clock);
 				// draw the wave onto the screen to display the notes played
 				displayWave(freq);
 
@@ -79,6 +79,29 @@ int main() {
 		}
 	}
 	return 0;
+}
+
+// calculate the signal without the remainder
+// float formerSignal(float freq, int time) {
+// 	// find the modulating value
+// 	int index = (((int)freq) * time)%48000;
+// 	double signal = sine[index];
+// 	return signal;
+// }
+
+// calculate the signal of all the frequency signals
+float calculateSignal(char* key_press, int t) {
+	int i;
+	double note = 0;
+	// loop through all keys and check if key i pressed
+	for(i = 0; i < 8; i++){
+		if(key_press[i] == 1){
+			// Sum all frequency samples
+			note += signal(frequency[i], t);
+			//data += getSample(frequencies[i], t);
+		}
+	}
+	return note;
 }
 
 // calculate the signal played from wavetable give a time and frequency
@@ -127,9 +150,9 @@ void displayWave(float freq) {
 }
 
 // return the note associated with its respective key
-float getNote(char *data) {
+float getNote(char *data, int clock) {
 	// initialize the freq variable
-	float freq;
+	float note;
 
 	switch(*data) {
 		// keyboard for value + gives volume up
@@ -221,14 +244,21 @@ float getNote(char *data) {
 		default:
 		break;
 	}
+	// int i;
+	// // calculate the frequency
+	// for(i = 0; i<8; i++) {
+	// 	freq +=pressed[i]*frequency[i];
+	// }
 	int i;
-	// calculate the frequency
-	for(i = 0; i<8; i++) {
-		freq +=pressed[i]*frequency[i];
+	// loop through all keys and check if key i pressed
+	for(i = 0; i < 8; i++){
+		if(pressed[i] == 1){
+			// Sum all frequency samples
+			note += signal(frequency[i], time);
+		}
 	}
-
-	// return calculated frequency
-	return freq;
+	// return calculated note
+	return note;
 }
 
 
