@@ -129,7 +129,7 @@ void displayWave(float freq) {
 	// initialize the colour and position
 	short colour = 0xFFFFFF;
 	int x, y;
-	// 48000 us the total sine wave, divide this by the number of x pixels with a frequency of 60 Hx
+	// 48000 is the total sine wave, divide this by the number of x pixels per full iteration, with a base frequency of 60 
 	int seg = 48000/(320.00*60/freq);
 	// initialize x position 
 	int time_pos = 0;
@@ -137,6 +137,7 @@ void displayWave(float freq) {
 	// iterate through the display to print out the wave
 	for(x=0; x<320; x++) {
 		// use a sine function in order to calculate the y pixel to draw the pt on 
+		//sine[6000] = the wave for 1/4 of the cycle.    Amplitude = volume affects amplitude of wave. 
 		y = (int) (((float)amplitude)*(float)sine[time_pos]*((float)10/(float)sine[6000])) + 120;
 
 		// draw calculated point in white
